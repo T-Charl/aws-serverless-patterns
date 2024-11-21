@@ -1,0 +1,10 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "ws-serverless-patterns-orders"
+resolve_s3 = true
+s3_prefix = "ws-serverless-patterns-orders"
+region = "eu-west-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "UserPool=\"eu-west-1_Nr16G8BL2\""
+image_repositories = []
