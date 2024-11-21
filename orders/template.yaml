@@ -124,6 +124,29 @@ Resources:
             Method: put
             RestApiId: !Ref WorkshopApiGateway
 
+  CancelOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/api/order/cancel
+      Handler: cancel_order.lambda_handler
+      Runtime: python3.9
+      Tracing: Active
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref OrdersTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref OrdersTable
+      Layers:
+        - !Ref pyutils
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /orders/{orderId}
+            Method: delete
+            RestApiId: !Ref WorkshopApiGateway
+
   pyutils:
     Type: AWS::Serverless::LayerVersion
     Properties:

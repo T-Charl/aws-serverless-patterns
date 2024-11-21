@@ -130,3 +130,5 @@ def test_edit_order(global_config, orders_endpoint, user_token):
   updated_order = response.json()
   assert updated_order['totalAmount'] == 25.97
   assert len(updated_order['orderItems']) == 3
+
+
