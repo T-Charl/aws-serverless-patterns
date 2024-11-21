@@ -60,6 +60,33 @@ Resources:
               Ref: WorkshopApiGateway
     Metadata:
       SamResourceId: AddOrderFunction
+  GetOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetOrderFunction
+      Handler: get_order.lambda_handler
+      Runtime: python3.9
+      Tracing: Active
+      Policies:
+      - DynamoDBReadPolicy:
+          TableName:
+            Ref: OrdersTable
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: OrdersTable
+      Layers:
+      - Ref: pyutils
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /orders/{orderId}
+            Method: get
+            RestApiId:
+              Ref: WorkshopApiGateway
+    Metadata:
+      SamResourceId: GetOrderFunction
   pyutils:
     Type: AWS::Serverless::LayerVersion
     Properties:

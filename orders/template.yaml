@@ -57,6 +57,50 @@ Resources:
             Path: /orders
             Method: post
             RestApiId: !Ref WorkshopApiGateway
+  GetOrderFunction:  # New resource: GetOrderFunction
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/api/order/get
+      Handler: get_order.lambda_handler
+      Runtime: python3.9
+      Tracing: Active
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref OrdersTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref OrdersTable
+      Layers:
+        - !Ref pyutils  # Assuming 'pyutils' is the correct reference name for the layer
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /orders/{orderId}
+            Method: get
+            RestApiId: !Ref WorkshopApiGateway
+
+  ListOrdersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/api/order/list
+      Handler: list_orders.lambda_handler
+      Runtime: python3.9
+      Tracing: Active
+      Policies:
+        DynamoDBReadPolicy:
+          TableName: !Ref OrdersTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref OrdersTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /orders
+            Method: get
+            RestApiId: !Ref WorkshopApiGateway          
+
   pyutils:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -69,29 +113,6 @@ Resources:
     Metadata:
       BuildMethod: python3.9
 
-    GetOrderFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/api/order/get
-      Handler: get_order.lambda_handler
-      Runtime: python3.9
-      Tracing: Active
-      Policies:
-        DynamoDBReadPolicy:
-          TableName: !Ref OrdersTable
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref OrdersTable
-      Layers:
-        - !Ref PyUtils
-      Events:
-        ApiEvent:
-          Type: Api
-          Properties:
-            Path: /orders/{orderId}
-            Method: get
-            RestApiId: !Ref WorkshopApiGateway
-
 Outputs:
   OrdersServiceEndpoint:  # Returns the API URL
     Description: "API Gateway endpoint URL"
@@ -99,3 +120,4 @@ Outputs:
   OrdersTable:
     Description: "DynamoDb Orders Table"
     Value: !Ref OrdersTable
+
