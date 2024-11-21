@@ -1,0 +1,18 @@
+
+
+export ID_TOKEN=$(aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id ${UserPoolClient} --auth-parameters USERNAME=<username>,PASSWORD=<password> --query 'AuthenticationResult.IdToken' --output text)
+
+
+export ID_TOKEN=$(aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id 12hkohffggci9d7pbouluu6sfd --auth-parameters USERNAME=hlatshie01@gmail.com,PASSWORD="Hlatshie01@" --query 'AuthenticationResult.IdToken' --output text)
+
+
+
+
+92b50474-6041-7028-6207-a04285112d31
+curl $API_ENDPOINT/users/92b50474-6041-7028-6207-a04285112d31 -H "Authorization:$ID_TOKEN"
+
+
+curl --location --request PUT "$API_ENDPOINT/users/92b50474-6041-7028-6207-a04285112d31" \
+     --data-raw '{"name": "My name is Hue Abbott"}' \
+     --header "Authorization: $ID_TOKEN" \
+     --header "Content-Type: application/json"
