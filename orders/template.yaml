@@ -10,6 +10,7 @@ Globals:
     Environment:
       Variables:
         POWERTOOLS_SERVICE_NAME: orders
+        POWERTOOLS_METRICS_NAMESPACE: ServerlessWorkshop
     Layers:
       - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:68
 
@@ -171,6 +172,7 @@ Resources:
         AttributeName: expiration
         Enabled: true
       BillingMode: PAY_PER_REQUEST
+
   pyutils:
     Type: AWS::Serverless::LayerVersion
     Properties:
